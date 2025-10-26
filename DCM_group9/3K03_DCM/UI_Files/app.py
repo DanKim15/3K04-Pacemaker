@@ -138,7 +138,6 @@ class Validator:
             return False, "Mode must be one of: AOO, VOO, AAI, VVI."
         return True, "OK"
 
-# ------------------------- Main App -------------------------
 class App(tk.Tk):
     def __init__(self, store: DCMStore):
         super().__init__()
@@ -148,8 +147,8 @@ class App(tk.Tk):
         self.store = store
         self.active_user: Optional[str] = None
         self.current_params: Dict[str, Any] = Parameters.default_dict()
-        self._device_com: bool = True  # Private variable
-        self._other_pacemaker_detected: bool = True  # Private variable
+        self._device_com: bool = True  
+        self._other_pacemaker_detected: bool = True  
         self._style()
         self._build()
     
@@ -218,23 +217,19 @@ class App(tk.Tk):
         self.show_welcome()
 
     def show_welcome(self):
-        # Hide dashboard, show welcome and force the login view to be visible
         self.dashboard.grid_forget()
         try:
-            # Reset the welcome view to login each time we show it
             if hasattr(self.welcome, "on_logout"):
                 self.welcome.on_logout()
         except Exception:
             pass
         self.welcome.grid(row=0, column=0, sticky="nsew")
         self.welcome.tkraise()
-        # Force immediate GUI update
         self.update_idletasks()
 
     def show_dashboard(self):
         self.welcome.grid_forget()
         self.dashboard.grid(row=0, column=0, sticky="nsew")
-        # Force immediate GUI update
         self.update_idletasks()
 
     def login_success(self, username: str):
@@ -252,7 +247,7 @@ class App(tk.Tk):
         self.show_dashboard()
 
     def logout(self):
-        # Clear session state and return to login screen (not blank)
+        # Clear session state and return to login screen
         self.active_user = None
         self.user_label.config(text="—")
         self.show_welcome()

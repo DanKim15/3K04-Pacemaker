@@ -1,6 +1,3 @@
-# ------------------------------
-# File: modes_view.py
-# ------------------------------
 from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -25,13 +22,10 @@ class ModesView(ttk.Frame):
         for i, (label, val) in enumerate(options):
             ttk.Radiobutton(grp, text=label, value=val, variable=self.mode_var, command=self._on_mode_change).grid(row=i, column=0, sticky="w", pady=2)
 
-        ttk.Label(self, text="Note: Deliverable 1 is front-end only; mode affects stored parameters only.").pack(anchor="w")
-
     def on_session_start(self):
         self._refresh_mode_ui()
 
     def _refresh_mode_ui(self):
-        """Refresh the mode selection to match current parameters"""
         self.mode_var.set(self.app.current_params.get("Mode", "AOO"))
 
     def _on_mode_change(self):

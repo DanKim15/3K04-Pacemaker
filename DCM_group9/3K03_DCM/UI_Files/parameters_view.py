@@ -1,6 +1,3 @@
-# ------------------------------
-# File: parameters_view.py
-# ------------------------------
 from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -51,11 +48,6 @@ class ParametersView(ttk.Frame):
         btns.pack(anchor="w", pady=(12,0))
         ttk.Button(btns, text="Apply Changes", command=self._apply_params).grid(row=0, column=0, padx=(0,6))
         ttk.Button(btns, text="Reset to Defaults", command=self._reset_params).grid(row=0, column=1)
-
-        help_text = (
-            "Validation (D1): URL must be > LRL; Amplitudes 0.1–5.0 V; Pulse widths 0.1–30 ms; ARP/VRP 100–500 ms."
-        )
-        ttk.Label(self, text=help_text, foreground="#444").pack(anchor="w", pady=(12,0))
 
     def on_session_start(self):
         self._refresh_params_ui()

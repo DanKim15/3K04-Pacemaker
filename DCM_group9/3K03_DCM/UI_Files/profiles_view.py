@@ -1,6 +1,3 @@
-# ------------------------------
-# File: profiles_view.py
-# ------------------------------
 from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -34,11 +31,6 @@ class ProfilesView(ttk.Frame):
         ttk.Label(form, text="Profile name").grid(row=0, column=0, padx=(0,8))
         ttk.Entry(form, textvariable=self.profile_name_var, width=24).grid(row=0, column=1)
         ttk.Button(right, text="Save Profile", command=self._save_profile).pack(anchor="w", pady=(8,0))
-
-        note = (
-            "Profiles are saved locally per user in dcm_config.json. The special profile '__last__' stores your last-used parameters."
-        )
-        ttk.Label(right, text=note, foreground="#444").pack(anchor="w", pady=(10,0))
 
     def on_session_start(self):
         self._refresh_profiles_list()
