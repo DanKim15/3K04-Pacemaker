@@ -1,0 +1,101 @@
+{
+  "users": {
+    "samarthvijayfat": {
+      "password_hash": "f06de413a10bc433140cbf00a08456d151d008420cc58aa64061133e37fd2a7c"
+    },
+    "farhansifarmuslim": {
+      "password_hash": "3148684bf267d7c3c9e7d2514dd08beae71a6d1365f760938be08590777bcf77"
+    },
+    "testuser2": {
+      "password_hash": "06720e4f95d229ab584623aa42672f0b89a8823d38eac84e53b0ffaea24dbe30"
+    },
+    "testuser3": {
+      "password_hash": "95fa204e0984efe887b4ba3405c35366431f534d9179881eca2082a58bce438d"
+    }
+  },
+  "profiles": {
+    "samarthvijayfat": {
+      "__last__": {
+        "LRL": 123,
+        "URL": 187,
+        "AtrialAmplitude": 4.1,
+        "AtrialPulseWidth": 17.0,
+        "VentricularAmplitude": 4.3,
+        "VentricularPulseWidth": 23.0,
+        "ARP": 130,
+        "VRP": 250,
+        "Mode": "AAI"
+      },
+      "samarth": {
+        "LRL": 60,
+        "URL": 120,
+        "AtrialAmplitude": 3.5,
+        "AtrialPulseWidth": 1.0,
+        "VentricularAmplitude": 3.5,
+        "VentricularPulseWidth": 1.0,
+        "ARP": 250,
+        "VRP": 320,
+        "Mode": "AOO"
+      },
+      "samarthupdated": {
+        "LRL": 155,
+        "URL": 210,
+        "AtrialAmplitude": 4.1,
+        "AtrialPulseWidth": 17.0,
+        "VentricularAmplitude": 4.3,
+        "VentricularPulseWidth": 23.0,
+        "ARP": 130,
+        "VRP": 250,
+        "Mode": "AOO"
+      },
+      "fat": {
+        "LRL": 123,
+        "URL": 187,
+        "AtrialAmplitude": 4.1,
+        "AtrialPulseWidth": 17.0,
+        "VentricularAmplitude": 4.3,
+        "VentricularPulseWidth": 23.0,
+        "ARP": 130,
+        "VRP": 250,
+        "Mode": "AAI"
+      }
+    },
+    "farhansifarmuslim": {
+      "__last__": {
+        "LRL": 35,
+        "URL": 200,
+        "AtrialAmplitude": 3.5,
+        "AtrialPulseWidth": 1.0,
+        "VentricularAmplitude": 3.5,
+        "VentricularPulseWidth": 1.0,
+        "ARP": 250,
+        "VRP": 400,
+        "Mode": "VOO"
+      },
+      "farhan": {
+        "LRL": 60,
+        "URL": 120,
+        "AtrialAmplitude": 3.5,
+        "AtrialPulseWidth": 1.0,
+        "VentricularAmplitude": 3.5,
+        "VentricularPulseWidth": 1.0,
+        "ARP": 250,
+        "VRP": 400,
+        "Mode": "VOO"
+      },
+      "farhan2": {
+        "LRL": 34,
+        "URL": 200,
+        "AtrialAmplitude": 3.5,
+        "AtrialPulseWidth": 1.0,
+        "VentricularAmplitude": 3.5,
+        "VentricularPulseWidth": 1.0,
+        "ARP": 250,
+        "VRP": 400,
+        "Mode": "VOO"
+      }
+    },
+    "testuser2": {},
+    "testuser3": {}
+  }
+}
