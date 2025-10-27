@@ -1,17 +1,8 @@
-# ------------------------------
-# File: registration_view.py
-# ------------------------------
 from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk, messagebox
 
 class WelcomeFrame(ttk.Frame):
-    """
-    Login-first welcome screen.
-    - Shows a simple Login form (username, password).
-    - Small 'Register' button under the password field navigates to a dedicated Register view.
-    - Registration view has its own form and a small 'Back to Login' button.
-    """
     def __init__(self, parent, app):
         super().__init__(parent)
         self.app = app
@@ -37,11 +28,11 @@ class WelcomeFrame(ttk.Frame):
         self._clear_content()
 
         title = ttk.Label(self._content, text="3K04 Device Controller–Monitor", font=("Segoe UI", 20, "bold"))
-        subtitle = ttk.Label(self._content, text="Deliverable 1 – Front-End Only", font=("Segoe UI", 12))
+        subtitle = ttk.Label(self._content, font=("Segoe UI", 12))
         title.grid(row=0, column=0, pady=(0,8))
         subtitle.grid(row=1, column=0, pady=(0,20))
 
-        # Login Card (only username/password + small Register button)
+        # Login Card
         login_card = ttk.Frame(self._content, style="Card.TFrame", padding=16)
         login_card.grid(row=2, column=0, sticky="nsew")
 
@@ -69,16 +60,14 @@ class WelcomeFrame(ttk.Frame):
         self.l_user.focus_set()
         self.l_pass.bind("<Return>", lambda _e: self._login())
 
-        footer = ttk.Label(self._content, text="Tip: Up to 10 users are stored locally in dcm_config.json")
+        footer = ttk.Label(self._content)
         footer.grid(row=3, column=0, pady=(14,0))
 
     def _show_register(self):
         self._clear_content()
 
         title = ttk.Label(self._content, text="Create Account", font=("Segoe UI", 20, "bold"))
-        subtitle = ttk.Label(self._content, text="Local account stored in dcm_config.json", font=("Segoe UI", 12))
         title.grid(row=0, column=0, pady=(0,8))
-        subtitle.grid(row=1, column=0, pady=(0,20))
 
         reg_card = ttk.Frame(self._content, style="Card.TFrame", padding=16)
         reg_card.grid(row=2, column=0, sticky="nsew")
@@ -105,7 +94,6 @@ class WelcomeFrame(ttk.Frame):
         self.r_user.focus_set()
         self.r_pass.bind("<Return>", lambda _e: self._register())
 
-    # ---------- behaviors ----------
     def _login(self):
         u = self.l_user.get().strip() if self.l_user else ""
         p = self.l_pass.get().strip() if self.l_pass else ""
@@ -147,7 +135,6 @@ class WelcomeFrame(ttk.Frame):
         else:
             messagebox.showerror("Registration failed", "Could not create account. Please try a different username.")
 
-    # ---------- reset on logout ----------
     def on_logout(self):
         """Ensure that logout returns user to the login screen."""
         self._show_login()
