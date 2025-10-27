@@ -4,14 +4,14 @@ from tkinter import ttk, messagebox
 
 class ParametersView(ttk.Frame):
     RANGES = {
-        "LRL": "[30–175 ppm]",
+        "LRL": "[30-175 ppm]",
         "URL": "(> LRL) [up to 220 ppm]",
-        "AtrialAmplitude": "[0.1–5.0 V]",
-        "AtrialPulseWidth": "[0.1–30 ms]",
-        "VentricularAmplitude": "[0.1–5.0 V]",
-        "VentricularPulseWidth": "[0.1–30 ms]",
-        "ARP": "[100–500 ms]",
-        "VRP": "[100–500 ms]",
+        "AtrialAmplitude": "[0.1-5.0 V]",
+        "AtrialPulseWidth": "[0.1-30 ms]",
+        "VentricularAmplitude": "[0.1-5.0 V]",
+        "VentricularPulseWidth": "[0.1-30 ms]",
+        "ARP": "[100-500 ms]",
+        "VRP": "[100-500 ms]",
     }
 
     def __init__(self, parent, app):
@@ -103,11 +103,11 @@ class ValidatorProxy:
             return False, f"Invalid input type: {e}"
         if not (30 <= LRL <= 175): return False, "LRL should be between 30 and 175 ppm."
         if not (LRL < URL <= 220): return False, "URL must be > LRL and ≤ 220 ppm."
-        if not (0.1 <= AA <= 5.0): return False, "Atrial Amplitude should be 0.1–5.0 V (regulated)."
-        if not (0.1 <= VA <= 5.0): return False, "Ventricular Amplitude should be 0.1–5.0 V (regulated)."
-        if not (0.1 <= APW <= 30.0): return False, "Atrial Pulse Width should be 0.1–30 ms."
-        if not (0.1 <= VPW <= 30.0): return False, "Ventricular Pulse Width should be 0.1–30 ms."
-        if not (100 <= ARP <= 500): return False, "ARP should be 100–500 ms."
-        if not (100 <= VRP <= 500): return False, "VRP should be 100–500 ms."
+        if not (0.1 <= AA <= 5.0): return False, "Atrial Amplitude should be 0.1-5.0 V (regulated)."
+        if not (0.1 <= VA <= 5.0): return False, "Ventricular Amplitude should be 0.1-5.0 V (regulated)."
+        if not (0.1 <= APW <= 30.0): return False, "Atrial Pulse Width should be 0.1-30 ms."
+        if not (0.1 <= VPW <= 30.0): return False, "Ventricular Pulse Width should be 0.1-30 ms."
+        if not (100 <= ARP <= 500): return False, "ARP should be 100-500 ms."
+        if not (100 <= VRP <= 500): return False, "VRP should be 100-500 ms."
         if Mode not in {"AOO", "VOO", "AAI", "VVI"}: return False, "Mode must be one of: AOO, VOO, AAI, VVI."
         return True, "OK"
