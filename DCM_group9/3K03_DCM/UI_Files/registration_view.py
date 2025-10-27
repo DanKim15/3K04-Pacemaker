@@ -1,6 +1,3 @@
-# ------------------------------
-# File: registration_view.py
-# ------------------------------
 from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -36,8 +33,8 @@ class WelcomeFrame(ttk.Frame):
     def _show_login(self):
         self._clear_content()
 
-        title = ttk.Label(self._content, text="3K04 Device Controller–Monitor", font=("Segoe UI", 20, "bold"))
-        subtitle = ttk.Label(self._content, text="Deliverable 1 – Front-End Only", font=("Segoe UI", 12))
+        title = ttk.Label(self._content, text="3K04 Device Controller-Monitor", font=("Segoe UI", 20, "bold"))
+        subtitle = ttk.Label(self._content, text="Deliverable 1 - Front-End Only", font=("Segoe UI", 12))
         title.grid(row=0, column=0, pady=(0,8))
         subtitle.grid(row=1, column=0, pady=(0,20))
 
