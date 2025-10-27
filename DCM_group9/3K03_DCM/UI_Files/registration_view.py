@@ -3,12 +3,6 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 class WelcomeFrame(ttk.Frame):
-    """
-    Login-first welcome screen.
-    - Shows a simple Login form (username, password).
-    - Small 'Register' button under the password field navigates to a dedicated Register view.
-    - Registration view has its own form and a small 'Back to Login' button.
-    """
     def __init__(self, parent, app):
         super().__init__(parent)
         self.app = app
@@ -25,7 +19,6 @@ class WelcomeFrame(ttk.Frame):
 
         self._show_login()
 
-    # ---------- view switching ----------
     def _clear_content(self):
         for w in self._content.winfo_children():
             w.destroy()
@@ -38,7 +31,7 @@ class WelcomeFrame(ttk.Frame):
         title.grid(row=0, column=0, pady=(0,8))
         subtitle.grid(row=1, column=0, pady=(0,20))
 
-        # Login Card (only username/password + small Register button)
+        # Login UI (only username/password and register butotn)
         login_card = ttk.Frame(self._content, style="Card.TFrame", padding=16)
         login_card.grid(row=2, column=0, sticky="nsew")
 
@@ -56,13 +49,12 @@ class WelcomeFrame(ttk.Frame):
         ttk.Button(login_card, text="Login", command=self._login)\
             .grid(row=3, column=0, columnspan=2, pady=(10,4), sticky="ew")
 
-        # Small Register nav button under password box
+        # Register button under password box
         small_row = ttk.Frame(login_card)
         small_row.grid(row=4, column=0, columnspan=2, sticky="w")
         ttk.Button(small_row, text="Register", command=self._show_register)\
             .pack(side="left")
-
-        # Keyboard affordance
+        
         self.l_user.focus_set()
         self.l_pass.bind("<Return>", lambda _e: self._login())
 
@@ -102,7 +94,6 @@ class WelcomeFrame(ttk.Frame):
         self.r_user.focus_set()
         self.r_pass.bind("<Return>", lambda _e: self._register())
 
-    # ---------- behaviors ----------
     def _login(self):
         u = self.l_user.get().strip() if self.l_user else ""
         p = self.l_pass.get().strip() if self.l_pass else ""
@@ -144,7 +135,7 @@ class WelcomeFrame(ttk.Frame):
         else:
             messagebox.showerror("Registration failed", "Could not create account. Please try a different username.")
 
-    # ---------- reset on logout ----------
+    # reset
     def on_logout(self):
-        """Ensure that logout returns user to the login screen."""
+        #Ensure that logout returns user to the login screen
         self._show_login()
