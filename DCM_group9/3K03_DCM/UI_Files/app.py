@@ -1,6 +1,3 @@
-# ------------------------------
-# File: app.py
-# ------------------------------
 from __future__ import annotations
 import json
 import os
@@ -123,17 +120,17 @@ class Validator:
         if not (LRL < URL <= 220):
             return False, "URL must be > LRL and ≤ 220 ppm."
         if not (0.1 <= AA <= 5.0):
-            return False, "Atrial Amplitude should be 0.1–5.0 V (regulated)."
+            return False, "Atrial Amplitude should be 0.1-5.0 V (regulated)."
         if not (0.1 <= VA <= 5.0):
-            return False, "Ventricular Amplitude should be 0.1–5.0 V (regulated)."
+            return False, "Ventricular Amplitude should be 0.1-5.0 V (regulated)."
         if not (0.1 <= APW <= 30.0):
-            return False, "Atrial Pulse Width should be 0.1–30 ms."
+            return False, "Atrial Pulse Width should be 0.1-30 ms."
         if not (0.1 <= VPW <= 30.0):
-            return False, "Ventricular Pulse Width should be 0.1–30 ms."
+            return False, "Ventricular Pulse Width should be 0.1-30 ms."
         if not (100 <= ARP <= 500):
-            return False, "ARP should be 100–500 ms."
+            return False, "ARP should be 100-500 ms."
         if not (100 <= VRP <= 500):
-            return False, "VRP should be 100–500 ms."
+            return False, "VRP should be 100-500 ms."
         if Mode not in {"AOO", "VOO", "AAI", "VVI"}:
             return False, "Mode must be one of: AOO, VOO, AAI, VVI."
         return True, "OK"
@@ -141,7 +138,7 @@ class Validator:
 class App(tk.Tk):
     def __init__(self, store: DCMStore):
         super().__init__()
-        self.title("3K04 DCM – Deliverable 1 (Modular)")
+        self.title("3K04 DCM - Deliverable 1 (Modular)")
         self.geometry("1000x650")
         self.minsize(900, 580)
         self.store = store
