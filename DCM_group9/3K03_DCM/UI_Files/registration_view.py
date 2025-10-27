@@ -19,7 +19,6 @@ class WelcomeFrame(ttk.Frame):
 
         self._show_login()
 
-    # ---------- view switching ----------
     def _clear_content(self):
         for w in self._content.winfo_children():
             w.destroy()
@@ -27,12 +26,12 @@ class WelcomeFrame(ttk.Frame):
     def _show_login(self):
         self._clear_content()
 
-        title = ttk.Label(self._content, text="3K04 Device Controller–Monitor", font=("Segoe UI", 20, "bold"))
-        subtitle = ttk.Label(self._content, font=("Segoe UI", 12))
+        title = ttk.Label(self._content, text="3K04 Device Controller-Monitor", font=("Segoe UI", 20, "bold"))
+        subtitle = ttk.Label(self._content, text="Deliverable 1 - Front-End Only", font=("Segoe UI", 12))
         title.grid(row=0, column=0, pady=(0,8))
         subtitle.grid(row=1, column=0, pady=(0,20))
 
-        # Login Card
+        # Login UI (only username/password and register butotn)
         login_card = ttk.Frame(self._content, style="Card.TFrame", padding=16)
         login_card.grid(row=2, column=0, sticky="nsew")
 
@@ -50,13 +49,12 @@ class WelcomeFrame(ttk.Frame):
         ttk.Button(login_card, text="Login", command=self._login)\
             .grid(row=3, column=0, columnspan=2, pady=(10,4), sticky="ew")
 
-        # Small Register nav button under password box
+        # Register button under password box
         small_row = ttk.Frame(login_card)
         small_row.grid(row=4, column=0, columnspan=2, sticky="w")
         ttk.Button(small_row, text="Register", command=self._show_register)\
             .pack(side="left")
-
-        # Keyboard affordance
+        
         self.l_user.focus_set()
         self.l_pass.bind("<Return>", lambda _e: self._login())
 
@@ -135,6 +133,7 @@ class WelcomeFrame(ttk.Frame):
         else:
             messagebox.showerror("Registration failed", "Could not create account. Please try a different username.")
 
+    # reset
     def on_logout(self):
-        """Ensure that logout returns user to the login screen."""
+        #Ensure that logout returns user to the login screen
         self._show_login()

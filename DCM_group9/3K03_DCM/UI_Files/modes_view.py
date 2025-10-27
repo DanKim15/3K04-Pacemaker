@@ -12,10 +12,10 @@ class ModesView(ttk.Frame):
     def _build(self):
         ttk.Label(self, text="Select Pacing Mode", font=("Segoe UI", 12, "bold")).pack(anchor="w")
         options = [
-            ("AOO – Atrial Asynchronous", "AOO"),
-            ("VOO – Ventricular Asynchronous", "VOO"),
-            ("AAI – Atrial Demand", "AAI"),
-            ("VVI – Ventricular Demand", "VVI"),
+            ("AOO - Atrial Asynchronous", "AOO"),
+            ("VOO - Ventricular Asynchronous", "VOO"),
+            ("AAI - Atrial Demand", "AAI"),
+            ("VVI - Ventricular Demand", "VVI"),
         ]
         grp = ttk.Frame(self)
         grp.pack(anchor="w", pady=(6,12))

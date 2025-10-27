@@ -1,6 +1,3 @@
-# ------------------------------
-# File: app.py
-# ------------------------------
 from __future__ import annotations
 import json
 import os
@@ -10,7 +7,7 @@ from typing import Dict, Any, Optional
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-# Local views
+# Local file imports
 from registration_view import WelcomeFrame
 from modes_view import ModesView
 from parameters_view import ParametersView
@@ -18,10 +15,10 @@ from profiles_view import ProfilesView
 from dcm_visuals_view import DCMVisualsView
 from about_view import AboutView
 
-CONFIG_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "dcm_config.json")
+CONFIG_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "dcm_config.json") #info file path
 MAX_USERS = 10
 
-# ------------------------- Data Layer -------------------------
+# Data Layer
 @dataclass
 class Parameters:
     LRL: int = 60
@@ -39,7 +36,7 @@ class Parameters:
         return asdict(Parameters())
 
 class DCMStore:
-    """Simple JSON-backed storage for users and per-user settings."""
+    #Simple JSON file based storage for users and individual settings
     def __init__(self, path: str):
         self.path = path
         if not os.path.exists(path):
@@ -61,7 +58,7 @@ class DCMStore:
         with open(self.path, "w", encoding="utf-8") as f:
             json.dump(self.data, f, indent=2)
 
-    # --- Users ---
+    # User Functions
     def user_count(self) -> int:
         return len(self.data.get("users", {}))
 
@@ -85,7 +82,7 @@ class DCMStore:
         stored = self.data["users"][username]["password_hash"]
         return stored == hash_pw(password)
 
-    # --- Profiles (per user) ---
+    # Profile functions per User
     def get_profiles(self, username: str) -> Dict[str, Dict[str, Any]]:
         return self.data.get("profiles", {}).get(username, {})
 
@@ -101,7 +98,7 @@ def hash_pw(pw: str) -> str:
     import hashlib
     return hashlib.sha256(pw.encode("utf-8")).hexdigest()
 
-# ------------------------- Validation -------------------------
+# Validation
 class Validator:
     @staticmethod
     def validate(params: Dict[str, Any]) -> tuple[bool, str]:
@@ -123,17 +120,17 @@ class Validator:
         if not (LRL < URL <= 220):
             return False, "URL must be > LRL and ≤ 220 ppm."
         if not (0.1 <= AA <= 5.0):
-            return False, "Atrial Amplitude should be 0.1–5.0 V (regulated)."
+            return False, "Atrial Amplitude should be 0.1-5.0 V (regulated)."
         if not (0.1 <= VA <= 5.0):
-            return False, "Ventricular Amplitude should be 0.1–5.0 V (regulated)."
+            return False, "Ventricular Amplitude should be 0.1-5.0 V (regulated)."
         if not (0.1 <= APW <= 30.0):
-            return False, "Atrial Pulse Width should be 0.1–30 ms."
+            return False, "Atrial Pulse Width should be 0.1-30 ms."
         if not (0.1 <= VPW <= 30.0):
-            return False, "Ventricular Pulse Width should be 0.1–30 ms."
+            return False, "Ventricular Pulse Width should be 0.1-30 ms."
         if not (100 <= ARP <= 500):
-            return False, "ARP should be 100–500 ms."
+            return False, "ARP should be 100-500 ms."
         if not (100 <= VRP <= 500):
-            return False, "VRP should be 100–500 ms."
+            return False, "VRP should be 100-500 ms."
         if Mode not in {"AOO", "VOO", "AAI", "VVI"}:
             return False, "Mode must be one of: AOO, VOO, AAI, VVI."
         return True, "OK"
@@ -141,7 +138,7 @@ class Validator:
 class App(tk.Tk):
     def __init__(self, store: DCMStore):
         super().__init__()
-        self.title("3K04 DCM – Deliverable 1 (Modular)")
+        self.title("3K04 DCM - Deliverable 1 (Modular)")
         self.geometry("1000x650")
         self.minsize(900, 580)
         self.store = store
