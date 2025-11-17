@@ -11,6 +11,12 @@
     },
     "testuser3": {
       "password_hash": "95fa204e0984efe887b4ba3405c35366431f534d9179881eca2082a58bce438d"
+    },
+    "testuser4": {
+      "password_hash": "fe49da050d5581a3eea1a59df6be935d082d82a838a5a03897cc2dcddefc2e0e"
+    },
+    "testuser5": {
+      "password_hash": "936e6844efe02737e2916dccc88baae074307119fe648d9f1d2a735071482107"
     }
   },
   "profiles": {
@@ -96,6 +102,31 @@
       }
     },
     "testuser2": {},
-    "testuser3": {}
+    "testuser3": {},
+    "testuser4": {},
+    "testuser5": {
+      "__last__": {
+        "LRL": 50,
+        "URL": 170,
+        "AtrialAmplitude": 2.7,
+        "AtrialPulseWidth": 0.6,
+        "VentricularAmplitude": 4.3,
+        "VentricularPulseWidth": 27.0,
+        "ARP": 110,
+        "VRP": 111,
+        "Mode": "AAI"
+      },
+      "Testuser5-1": {
+        "LRL": 50,
+        "URL": 170,
+        "AtrialAmplitude": 2.7,
+        "AtrialPulseWidth": 0.6,
+        "VentricularAmplitude": 4.3,
+        "VentricularPulseWidth": 27.0,
+        "ARP": 110,
+        "VRP": 111,
+        "Mode": "AAI"
+      }
+    }
   }
 }

@@ -27,9 +27,7 @@ class WelcomeFrame(ttk.Frame):
         self._clear_content()
 
         title = ttk.Label(self._content, text="3K04 Device Controller-Monitor", font=("Segoe UI", 20, "bold"))
-        subtitle = ttk.Label(self._content, text="Deliverable 1 - Front-End Only", font=("Segoe UI", 12))
         title.grid(row=0, column=0, pady=(0,8))
-        subtitle.grid(row=1, column=0, pady=(0,20))
 
         # Login UI (only username/password and register butotn)
         login_card = ttk.Frame(self._content, style="Card.TFrame", padding=16)
@@ -58,16 +56,14 @@ class WelcomeFrame(ttk.Frame):
         self.l_user.focus_set()
         self.l_pass.bind("<Return>", lambda _e: self._login())
 
-        footer = ttk.Label(self._content, text="Tip: Up to 10 users are stored locally in dcm_config.json")
+        footer = ttk.Label(self._content)
         footer.grid(row=3, column=0, pady=(14,0))
 
     def _show_register(self):
         self._clear_content()
 
         title = ttk.Label(self._content, text="Create Account", font=("Segoe UI", 20, "bold"))
-        subtitle = ttk.Label(self._content, text="Local account stored in dcm_config.json", font=("Segoe UI", 12))
         title.grid(row=0, column=0, pady=(0,8))
-        subtitle.grid(row=1, column=0, pady=(0,20))
 
         reg_card = ttk.Frame(self._content, style="Card.TFrame", padding=16)
         reg_card.grid(row=2, column=0, sticky="nsew")
