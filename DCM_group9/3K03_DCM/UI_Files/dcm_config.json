@@ -78,44 +78,6 @@
         "Mode": "AAI"
       }
     },
-    "farhansifarmuslim": {
-      "__last__": {
-        "LRL": 35,
-        "URL": 200,
-        "AtrialAmplitude": 3.5,
-        "AtrialPulseWidth": 1.0,
-        "VentricularAmplitude": 3.5,
-        "VentricularPulseWidth": 1.0,
-        "ARP": 250,
-        "VRP": 400,
-        "Mode": "VOO"
-      },
-      "farhan": {
-        "LRL": 60,
-        "URL": 120,
-        "AtrialAmplitude": 3.5,
-        "AtrialPulseWidth": 1.0,
-        "VentricularAmplitude": 3.5,
-        "VentricularPulseWidth": 1.0,
-        "ARP": 250,
-        "VRP": 400,
-        "Mode": "VOO"
-      },
-      "farhan2": {
-        "LRL": 34,
-        "URL": 200,
-        "AtrialAmplitude": 3.5,
-        "AtrialPulseWidth": 1.0,
-        "VentricularAmplitude": 3.5,
-        "VentricularPulseWidth": 1.0,
-        "ARP": 250,
-        "VRP": 400,
-        "Mode": "VOO"
-      }
-    },
-    "testuser2": {},
-    "testuser3": {},
-    "testuser4": {},
     "testuser5": {
       "__last__": {
         "LRL": 50,

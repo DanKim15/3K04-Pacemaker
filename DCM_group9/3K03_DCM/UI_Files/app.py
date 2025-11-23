@@ -14,6 +14,7 @@ from parameters_view import ParametersView
 from profiles_view import ProfilesView
 from dcm_visuals_view import DCMVisualsView
 from about_view import AboutView
+from egram_view import EgramView
 from serial_com import SerialManager
 
 CONFIG_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "dcm_config.json") #info file path
@@ -210,12 +211,14 @@ class App(tk.Tk):
         self.params_view = ParametersView(self.tabs, self)
         self.profiles_view = ProfilesView(self.tabs, self)
         self.dcm_visuals_view = DCMVisualsView(self.tabs, self)
+        self.egram_view = EgramView(self.tabs, self)
         self.about_view = AboutView(self.tabs, self)
 
         self.tabs.add(self.modes_view, text="Modes")
         self.tabs.add(self.params_view, text="Parameters")
         self.tabs.add(self.profiles_view, text="Profiles")
         self.tabs.add(self.dcm_visuals_view, text="DCM Device Visuals")
+        self.tabs.add(self.egram_view, text="Egram")
         self.tabs.add(self.about_view, text="About")
 
         top = ttk.Frame(self.dashboard, padding=(10,8))
@@ -257,6 +260,7 @@ class App(tk.Tk):
         self.params_view.on_session_start()
         self.profiles_view.on_session_start()
         self.dcm_visuals_view.on_session_start()
+        self.egram_view.on_session_start()
         self.show_dashboard()
 
     def logout(self):
@@ -340,6 +344,39 @@ class App(tk.Tk):
         # Persist as "__last__" for active user
         if self.active_user:
             self.store.save_profile(self.active_user, "__last__", self.current_params)
+    
+    def update_egram_data(self, egram_data: Dict[str, Any]):
+        """
+        Update egram view with new data from pacemaker.
+        Called from SerialManager thread via app.after(...).
+        """
+        if not hasattr(self, 'egram_view'):
+            return
+        
+        timestamp_ms = egram_data.get("timestamp_ms", 0)
+        atrial_value = egram_data.get("atrial_value")
+        ventricular_value = egram_data.get("ventricular_value")
+        
+        # Add data points
+        if atrial_value is not None or ventricular_value is not None:
+            self.egram_view.add_egram_data(
+                atrial_value if atrial_value is not None else 0.0,
+                ventricular_value if ventricular_value is not None else 0.0,
+                timestamp_ms
+            )
+        
+        # Add event marker if present
+        event_marker = egram_data.get("event_marker")
+        if event_marker:
+            event_channel = egram_data.get("event_channel", "Both")
+            event_timestamp = egram_data.get("event_timestamp_ms", timestamp_ms)
+            description = f"Event: {event_marker}"
+            self.egram_view.add_event_marker(
+                event_timestamp,
+                event_channel,
+                event_marker,
+                description
+            )
 
 def main():
     store = DCMStore(CONFIG_PATH)
