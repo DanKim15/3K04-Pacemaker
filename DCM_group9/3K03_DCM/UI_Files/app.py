@@ -14,6 +14,7 @@ from parameters_view import ParametersView
 from profiles_view import ProfilesView
 from dcm_visuals_view import DCMVisualsView
 from about_view import AboutView
+from serial_com import SerialManager
 
 CONFIG_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "dcm_config.json") #info file path
 MAX_USERS = 10
@@ -30,6 +31,7 @@ class Parameters:
     ARP: int = 250
     VRP: int = 320
     Mode: str = "AOO"
+    Hysteresis: bool = False  # NEW
 
     @staticmethod
     def default_dict() -> Dict[str, Any]:
@@ -103,49 +105,63 @@ class Validator:
     @staticmethod
     def validate(params: Dict[str, Any]) -> tuple[bool, str]:
         try:
-            LRL = int(params["LRL"])  # ppm
-            URL = int(params["URL"])  # ppm
-            AA = float(params["AtrialAmplitude"])   # V
-            APW = float(params["AtrialPulseWidth"]) # ms
-            VA = float(params["VentricularAmplitude"]) # V
-            VPW = float(params["VentricularPulseWidth"]) # ms
-            ARP = int(params["ARP"])  # ms
-            VRP = int(params["VRP"])  # ms
+            LRL = int(params["LRL"])
+            URL = int(params["URL"])
+            AA = int(params["AtrialAmplitude"])
+            APW = int(params["AtrialPulseWidth"])
+            VA = int(params["VentricularAmplitude"])
+            VPW = int(params["VentricularPulseWidth"])
+            ARP = int(params["ARP"])
+            VRP = int(params["VRP"])
             Mode = str(params["Mode"]).upper()
-        except (KeyError, ValueError) as e:
+            # Hysteresis is a boolean flag; be lenient
+            _ = bool(params.get("Hysteresis", False))
+        except Exception as e:
             return False, f"Invalid input type: {e}"
 
         if not (30 <= LRL <= 175):
             return False, "LRL should be between 30 and 175 ppm."
         if not (LRL < URL <= 220):
             return False, "URL must be > LRL and ≤ 220 ppm."
-        if not (0.1 <= AA <= 5.0):
-            return False, "Atrial Amplitude should be 0.1-5.0 V (regulated)."
-        if not (0.1 <= VA <= 5.0):
-            return False, "Ventricular Amplitude should be 0.1-5.0 V (regulated)."
-        if not (0.1 <= APW <= 30.0):
-            return False, "Atrial Pulse Width should be 0.1-30 ms."
-        if not (0.1 <= VPW <= 30.0):
-            return False, "Ventricular Pulse Width should be 0.1-30 ms."
+        if not (1 <= AA <= 7):
+            return False, "Atrial Amplitude should be 0.5-7.0 V."
+        if not (1 <= VA <= 7):
+            return False, "Ventricular Amplitude should be 0.5-7.0 V."
+        if not (10 <= APW <= 3000):
+            return False, "Atrial Pulse Width should be 10-3000 ms."
+        if not (10 <= VPW <= 3000):
+            return False, "Ventricular Pulse Width should be 10-3000 ms."
         if not (100 <= ARP <= 500):
             return False, "ARP should be 100-500 ms."
         if not (100 <= VRP <= 500):
             return False, "VRP should be 100-500 ms."
-        if Mode not in {"AOO", "VOO", "AAI", "VVI"}:
-            return False, "Mode must be one of: AOO, VOO, AAI, VVI."
+        valid_modes = {
+            "AOO", "VOO", "AAI", "VVI",
+            "AOO-R", "VOO-R", "AAI-R", "VVI-R",
+        }
+        if Mode not in valid_modes:
+            return False, "Mode must be one of: AOO, VOO, AAI, VVI, AOO-R, VOO-R, AAI-R, VVI-R."
         return True, "OK"
+
 
 class App(tk.Tk):
     def __init__(self, store: DCMStore):
         super().__init__()
-        self.title("3K04 DCM - Deliverable 1 (Modular)")
+        self.title("3K04 DCM - Deliverable 2")
         self.geometry("1000x650")
         self.minsize(900, 580)
+
         self.store = store
         self.active_user: Optional[str] = None
         self.current_params: Dict[str, Any] = Parameters.default_dict()
-        self._device_com: bool = True  
-        self._other_pacemaker_detected: bool = True  
+
+        # Device communication flags
+        self._device_com: bool = False
+        self._other_pacemaker_detected: bool = False
+
+        # Serial manager for UART
+        self.serial_manager = SerialManager(self)
+
         self._style()
         self._build()
     
@@ -156,7 +172,7 @@ class App(tk.Tk):
     @device_com.setter
     def device_com(self, value: bool):
         self._device_com = value
-        # Auto-update UI when value changes
+        # Auto-update UI when value changesa
         if hasattr(self, 'dcm_visuals_view'):
             self.dcm_visuals_view._refresh_status()
     
@@ -248,7 +264,82 @@ class App(tk.Tk):
         self.active_user = None
         self.user_label.config(text="—")
         self.show_welcome()
+    # NEW SERIAL FUNCTIONS
+    @staticmethod
+    def mode_to_code(mode: str) -> int:
+        """
+        Map mode string -> MODE_SELECT code.
 
+        0 → AOO
+        1 → VOO
+        2 → AAI
+        3 → VVI
+        4 → AOO-R
+        5 → VOO-R
+        6 → AAI-R
+        7 → VVI-R
+        """
+        mapping = {
+            "AOO": 0,
+            "VOO": 1,
+            "AAI": 2,
+            "VVI": 3,
+            "AOO-R": 4,
+            "VOO-R": 5,
+            "AAI-R": 6,
+            "VVI-R": 7,
+        }
+        return mapping.get(mode.upper(), 0)
+
+    @staticmethod
+    def code_to_mode(code: int) -> str:
+        reverse = {
+            0: "AOO",
+            1: "VOO",
+            2: "AAI",
+            3: "VVI",
+            4: "AOO-R",
+            5: "VOO-R",
+            6: "AAI-R",
+            7: "VVI-R",
+        }
+        return reverse.get(int(code), "AOO")
+
+    def connect_device(self):
+        """Open serial port and start background read loop."""
+        ok, err = self.serial_manager.open_port("COM4")
+        if ok:
+            self.device_com = True
+            messagebox.showinfo(
+                "Device Connected",
+                f"Connected to pacemaker on {self.serial_manager.port_name}",
+            )
+        else:
+            self.device_com = False
+            messagebox.showerror("Connection Failed", err or "Unknown error")
+
+    def disconnect_device(self):
+        """Close serial port and stop background reader."""
+        self.serial_manager.close_port()
+        self.device_com = False
+        messagebox.showinfo("Device Disconnected", "Serial port closed.")
+
+    def update_params_from_device(self, new_params: Dict[str, Any]):
+        """
+        Merge parameters echoed from pacemaker into current_params and refresh UI.
+        This is scheduled via app.after(...) from the SerialManager thread.
+        """
+        self.current_params.update(new_params)
+
+        # Refresh views
+        if hasattr(self, "params_view"):
+            self.params_view._refresh_params_ui()
+        if hasattr(self, "modes_view"):
+            self.modes_view._refresh_mode_ui()
+
+        # Persist as "__last__" for active user
+        if self.active_user:
+            self.store.save_profile(self.active_user, "__last__", self.current_params)
 
 def main():
     store = DCMStore(CONFIG_PATH)

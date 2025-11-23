@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'pacemaker_simulink'.
  *
- * Model version                  : 1.56
+ * Model version                  : 1.196
  * Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
- * C/C++ source code generated on : Mon Oct 27 15:49:44 2025
+ * C/C++ source code generated on : Sat Nov 22 22:36:14 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -22,110 +22,250 @@
 
 /* Block parameters (default storage) */
 P_pacemaker_simulink_T pacemaker_simulink_P = {
+  /* Expression: 0.02
+   * Referenced by: '<S1>/FXOS8700 6-Axes Sensor'
+   */
+  0.02,
+
+  /* Expression: 0
+   * Referenced by: '<S10>/Switch'
+   */
+  0.0,
+
+  /* Expression: 0
+   * Referenced by: '<S11>/Switch'
+   */
+  0.0,
+
   /* Expression: SampleTime
-   * Referenced by: '<S1>/VENT_CMP_DETECT'
+   * Referenced by: '<S6>/VENT_CMP_DETECT'
    */
   -1.0,
 
   /* Expression: SampleTime
-   * Referenced by: '<S1>/ATR_CMP_DETECT'
+   * Referenced by: '<S6>/ATR_CMP_DETECT'
    */
   -1.0,
 
-  /* Expression: 130
-   * Referenced by: '<S1>/LOWER_RATE_LIMIT'
+  /* Expression: -1
+   * Referenced by: '<S7>/UART Receive'
    */
-  130.0,
+  -1.0,
+
+  /* Expression: 0.75
+   * Referenced by: '<S5>/ATR_SENS'
+   */
+  0.75,
+
+  /* Expression: 100
+   * Referenced by: '<S5>/Gain4'
+   */
+  100.0,
+
+  /* Expression: 0.75
+   * Referenced by: '<S5>/VENT_SENS'
+   */
+  0.75,
+
+  /* Expression: 100
+   * Referenced by: '<S5>/Gain5'
+   */
+  100.0,
+
+  /* Expression: 60000
+   * Referenced by: '<S2>/Constant'
+   */
+  60000.0,
+
+  /* Expression: 0
+   * Referenced by: '<Root>/Rate Transition'
+   */
+  0.0,
+
+  /* Expression: 1
+   * Referenced by: '<S2>/ACTIVITY_THRESHOLD'
+   */
+  1.0,
+
+  /* Expression: 8
+   * Referenced by: '<S2>/Constant1'
+   */
+  8.0,
+
+  /* Expression: 60
+   * Referenced by: '<S2>/Previous Rate'
+   */
+  60.0,
 
   /* Expression: 120
-   * Referenced by: '<S1>/UPPER_RATE_LIMIT'
+   * Referenced by: '<S2>/MAX_SENSOR_RATE'
    */
   120.0,
 
-  /* Expression: 3.5
-   * Referenced by: '<S1>/ATR_PULSE_AMP_REG'
+  /* Expression: 5
+   * Referenced by: '<S2>/RECOVERY_TIME_min'
    */
-  3.5,
+  5.0,
 
-  /* Expression: 20
-   * Referenced by: '<S1>/Gain'
+  /* Expression: 1000
+   * Referenced by: '<S12>/Constant'
    */
-  20.0,
+  1000.0,
 
-  /* Expression: 3.5
-   * Referenced by: '<S1>/VENT_PULSE_AMP_REG'
+  /* Expression: 16
+   * Referenced by: '<S9>/#ResponseFactors'
    */
-  3.5,
+  16.0,
 
-  /* Expression: 20
-   * Referenced by: '<S1>/Gain1'
+  /* Expression: 16
+   * Referenced by: '<S2>/RESPONSE_FACTOR'
    */
-  20.0,
+  16.0,
 
-  /* Expression: 0.4
-   * Referenced by: '<S1>/ATR_PULSE_WIDTH'
+  /* Expression: 0.5
+   * Referenced by: '<S2>/REACTION_TIME_min'
    */
-  0.4,
+  0.5,
 
-  /* Expression: 100
-   * Referenced by: '<S1>/Gain2'
+  /* Expression: 1000
+   * Referenced by: '<S13>/Constant'
    */
-  100.0,
+  1000.0,
 
-  /* Expression: 0.4
-   * Referenced by: '<S1>/VENT_PULSE_WIDTH'
+  /* Expression: 0
+   * Referenced by: '<S8>/Unit Delay'
    */
-  0.4,
+  0.0,
 
-  /* Expression: 100
-   * Referenced by: '<S1>/Gain3'
+  /* Expression: 0
+   * Referenced by: '<S8>/Unit Delay1'
    */
-  100.0,
+  0.0,
 
-  /* Expression: 0.75
-   * Referenced by: '<S1>/ATR_SENS'
+  /* Expression: 0
+   * Referenced by: '<S8>/Unit Delay2'
    */
-  0.75,
+  0.0,
 
-  /* Expression: 100
-   * Referenced by: '<S1>/Gain4'
+  /* Expression: 0
+   * Referenced by: '<S8>/Unit Delay3'
    */
-  100.0,
+  0.0,
 
-  /* Expression: 0.75
-   * Referenced by: '<S1>/VENT_SENS'
+  /* Expression: 0
+   * Referenced by: '<S8>/Unit Delay4'
    */
-  0.75,
+  0.0,
 
-  /* Expression: 100
-   * Referenced by: '<S1>/Gain5'
+  /* Expression: 0
+   * Referenced by: '<S8>/Unit Delay5'
    */
-  100.0,
+  0.0,
 
-  /* Computed Parameter: ATR_REFRAC_PERIOD_Value
-   * Referenced by: '<S1>/ATR_REFRAC_PERIOD'
+  /* Expression: 0
+   * Referenced by: '<S8>/Unit Delay6'
    */
-  500,
+  0.0,
 
-  /* Computed Parameter: VENT_REFRAC_PERIOD_Value
-   * Referenced by: '<S1>/VENT_REFRAC_PERIOD'
+  /* Expression: 8
+   * Referenced by: '<S8>/Constant'
    */
-  320,
+  8.0,
+
+  /* Expression: 1
+   * Referenced by: '<S1>/Subtract Gravity'
+   */
+  1.0,
+
+  /* Expression: 4
+   * Referenced by: '<S1>/Constant'
+   */
+  4.0,
+
+  /* Expression: 1
+   * Referenced by: '<S1>/Clamp 0 - 1'
+   */
+  1.0,
+
+  /* Expression: 0
+   * Referenced by: '<S1>/Clamp 0 - 1'
+   */
+  0.0,
+
+  /* Computed Parameter: Gain_Gain
+   * Referenced by: '<S5>/Gain'
+   */
+  40960U,
+
+  /* Computed Parameter: Gain1_Gain
+   * Referenced by: '<S5>/Gain1'
+   */
+  40960U,
 
   /* Computed Parameter: HYSTERESIS_INTERVAL_Value
-   * Referenced by: '<S1>/HYSTERESIS_INTERVAL'
+   * Referenced by: '<S5>/HYSTERESIS_INTERVAL'
    */
-  300,
+  300U,
+
+  /* Computed Parameter: DataStoreMemory_InitialValue
+   * Referenced by: '<Root>/Data Store Memory'
+   */
+  3U,
+
+  /* Computed Parameter: DataStoreMemory1_InitialValue
+   * Referenced by: '<Root>/Data Store Memory1'
+   */
+  40U,
+
+  /* Computed Parameter: DataStoreMemory2_InitialValue
+   * Referenced by: '<Root>/Data Store Memory2'
+   */
+  40U,
+
+  /* Computed Parameter: DataStoreMemory3_InitialValue
+   * Referenced by: '<Root>/Data Store Memory3'
+   */
+  250U,
+
+  /* Computed Parameter: DataStoreMemory4_InitialValue
+   * Referenced by: '<Root>/Data Store Memory4'
+   */
+  320U,
+
+  /* Computed Parameter: DataStoreMemory7_InitialValue
+   * Referenced by: '<Root>/Data Store Memory7'
+   */
+  60U,
+
+  /* Computed Parameter: DataStoreMemory8_InitialValue
+   * Referenced by: '<Root>/Data Store Memory8'
+   */
+  150U,
+
+  /* Computed Parameter: DataStoreMemory9_InitialValue
+   * Referenced by: '<Root>/Data Store Memory9'
+   */
+  3U,
 
   /* Expression: false
-   * Referenced by: '<S1>/HYSTERESIS'
+   * Referenced by: '<Root>/Data Store Memory6'
    */
   0,
 
-  /* Computed Parameter: MODE_SELECT_Value
-   * Referenced by: '<S1>/MODE_SELECT'
+  /* Computed Parameter: SYNC_TX_Value
+   * Referenced by: '<S15>/SYNC_TX'
    */
-  2
+  22U,
+
+  /* Computed Parameter: MSGTYPE_TX_Value
+   * Referenced by: '<S15>/MSGTYPE_TX'
+   */
+  129U,
+
+  /* Computed Parameter: DataStoreMemory5_InitialValue
+   * Referenced by: '<Root>/Data Store Memory5'
+   */
+  0U
 };
 
 /*

@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'pacemaker_simulink'.
  *
- * Model version                  : 1.56
+ * Model version                  : 1.196
  * Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
- * C/C++ source code generated on : Mon Oct 27 15:49:44 2025
+ * C/C++ source code generated on : Sat Nov 22 22:36:14 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -23,8 +23,11 @@
 
 /* Model Code Variants */
 
-/* Custom Type definition for MATLABSystem: '<S2>/Digital Write' */
+/* Custom Type definition for MATLABSystem: '<S15>/Serial Transmit' */
 #include "MW_SVD.h"
+
+/* Custom Type definition for MATLABSystem: '<S1>/FXOS8700 6-Axes Sensor' */
+#include "MW_I2C.h"
 #ifndef struct_tag_bvK2L41g8z1P0jzpdjsJhE
 #define struct_tag_bvK2L41g8z1P0jzpdjsJhE
 
@@ -42,27 +45,47 @@ typedef struct tag_bvK2L41g8z1P0jzpdjsJhE b_freedomk64f_Hardware_pacema_T;
 
 #endif                               /*typedef_b_freedomk64f_Hardware_pacema_T*/
 
-#ifndef struct_tag_gY1zYXXyNHJpvdqiHJr34G
-#define struct_tag_gY1zYXXyNHJpvdqiHJr34G
+#ifndef struct_tag_dJFZzmsGU3XebjMxPxDlh
+#define struct_tag_dJFZzmsGU3XebjMxPxDlh
 
-struct tag_gY1zYXXyNHJpvdqiHJr34G
+struct tag_dJFZzmsGU3XebjMxPxDlh
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  b_freedomk64f_Hardware_pacema_T Hw;
+  uint32_T BusSpeed;
+  MW_Handle_Type MW_I2C_HANDLE;
+};
+
+#endif                                 /*struct_tag_dJFZzmsGU3XebjMxPxDlh*/
+
+#ifndef typedef_b_freedomk64f_I2CMasterWrite__T
+#define typedef_b_freedomk64f_I2CMasterWrite__T
+
+typedef struct tag_dJFZzmsGU3XebjMxPxDlh b_freedomk64f_I2CMasterWrite__T;
+
+#endif                               /*typedef_b_freedomk64f_I2CMasterWrite__T*/
+
+#ifndef struct_tag_IfyqWdTTOITb2iei5A9qmC
+#define struct_tag_IfyqWdTTOITb2iei5A9qmC
+
+struct tag_IfyqWdTTOITb2iei5A9qmC
 {
   boolean_T matlabCodegenIsDeleted;
   int32_T isInitialized;
   boolean_T isSetupComplete;
-  b_freedomk64f_Hardware_pacema_T Hw;
-  MW_Handle_Type MW_DIGITALIO_HANDLE;
   real_T SampleTime;
+  b_freedomk64f_I2CMasterWrite__T i2cobj;
 };
 
-#endif                                 /*struct_tag_gY1zYXXyNHJpvdqiHJr34G*/
+#endif                                 /*struct_tag_IfyqWdTTOITb2iei5A9qmC*/
 
-#ifndef typedef_freedomk64f_DigitalRead_pacem_T
-#define typedef_freedomk64f_DigitalRead_pacem_T
+#ifndef typedef_freedomk64f_fxos8700_pacemake_T
+#define typedef_freedomk64f_fxos8700_pacemake_T
 
-typedef struct tag_gY1zYXXyNHJpvdqiHJr34G freedomk64f_DigitalRead_pacem_T;
+typedef struct tag_IfyqWdTTOITb2iei5A9qmC freedomk64f_fxos8700_pacemake_T;
 
-#endif                               /*typedef_freedomk64f_DigitalRead_pacem_T*/
+#endif                               /*typedef_freedomk64f_fxos8700_pacemake_T*/
 
 #ifndef struct_tag_62aCTDKRGQaAsT8vVipI2D
 #define struct_tag_62aCTDKRGQaAsT8vVipI2D
@@ -105,6 +128,71 @@ struct tag_asB9FwAteE1VObOuq1LwyE
 typedef struct tag_asB9FwAteE1VObOuq1LwyE freedomk64f_PWMOutput_pacemak_T;
 
 #endif                               /*typedef_freedomk64f_PWMOutput_pacemak_T*/
+
+#ifndef struct_tag_gY1zYXXyNHJpvdqiHJr34G
+#define struct_tag_gY1zYXXyNHJpvdqiHJr34G
+
+struct tag_gY1zYXXyNHJpvdqiHJr34G
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  boolean_T isSetupComplete;
+  b_freedomk64f_Hardware_pacema_T Hw;
+  MW_Handle_Type MW_DIGITALIO_HANDLE;
+  real_T SampleTime;
+};
+
+#endif                                 /*struct_tag_gY1zYXXyNHJpvdqiHJr34G*/
+
+#ifndef typedef_freedomk64f_DigitalRead_pacem_T
+#define typedef_freedomk64f_DigitalRead_pacem_T
+
+typedef struct tag_gY1zYXXyNHJpvdqiHJr34G freedomk64f_DigitalRead_pacem_T;
+
+#endif                               /*typedef_freedomk64f_DigitalRead_pacem_T*/
+
+#ifndef struct_tag_79weVYaslRFZRGk3pNTXC
+#define struct_tag_79weVYaslRFZRGk3pNTXC
+
+struct tag_79weVYaslRFZRGk3pNTXC
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  boolean_T isSetupComplete;
+  b_freedomk64f_Hardware_pacema_T Hw;
+  MW_Handle_Type MW_SCIHANDLE;
+  real_T SampleTime;
+};
+
+#endif                                 /*struct_tag_79weVYaslRFZRGk3pNTXC*/
+
+#ifndef typedef_freedomk64f_SCIRead_pacemaker_T
+#define typedef_freedomk64f_SCIRead_pacemaker_T
+
+typedef struct tag_79weVYaslRFZRGk3pNTXC freedomk64f_SCIRead_pacemaker_T;
+
+#endif                               /*typedef_freedomk64f_SCIRead_pacemaker_T*/
+
+#ifndef struct_tag_WltE1qT51p3S2KRQQd2Zd
+#define struct_tag_WltE1qT51p3S2KRQQd2Zd
+
+struct tag_WltE1qT51p3S2KRQQd2Zd
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  boolean_T isSetupComplete;
+  b_freedomk64f_Hardware_pacema_T Hw;
+  MW_Handle_Type MW_SCIHANDLE;
+};
+
+#endif                                 /*struct_tag_WltE1qT51p3S2KRQQd2Zd*/
+
+#ifndef typedef_freedomk64f_SCIWrite_pacemake_T
+#define typedef_freedomk64f_SCIWrite_pacemake_T
+
+typedef struct tag_WltE1qT51p3S2KRQQd2Zd freedomk64f_SCIWrite_pacemake_T;
+
+#endif                               /*typedef_freedomk64f_SCIWrite_pacemake_T*/
 
 /* Parameters (default storage) */
 typedef struct P_pacemaker_simulink_T_ P_pacemaker_simulink_T;

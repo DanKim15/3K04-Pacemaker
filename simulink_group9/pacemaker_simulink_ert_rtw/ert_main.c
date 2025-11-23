@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'pacemaker_simulink'.
  *
- * Model version                  : 1.56
+ * Model version                  : 1.196
  * Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
- * C/C++ source code generated on : Mon Oct 27 15:49:44 2025
+ * C/C++ source code generated on : Sat Nov 22 22:36:14 2025
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -21,6 +21,7 @@
 #include "pacemaker_simulink_private.h"
 #include "rtwtypes.h"
 #include "limits.h"
+#include "rt_nonfinite.h"
 #include "board.h"
 #include "mw_cmsis_rtos.h"
 #define UNUSED(x)                      x = x
@@ -35,22 +36,48 @@ volatile boolean_T stopRequested = false;
 volatile boolean_T runModel = true;
 mw_signal_event_t stopSem;
 mw_signal_event_t baserateTaskSem;
+mw_signal_event_t subrateTaskSem[1];
+int taskId[1];
 mw_thread_t schedulerThread;
 mw_thread_t baseRateThread;
 void *threadJoinStatus;
 int terminatingmodel = 0;
+mw_thread_t subRateThread[1];
+int subratePriority[1];
+void *subrateTask(void *arg)
+{
+  int tid = *((int *) arg);
+  int subRateId;
+  subRateId = tid + 1;
+  while (runModel) {
+    mw_osSignalEventWaitEver(&subrateTaskSem[tid]);
+    if (terminatingmodel)
+      break;
+    pacemaker_simulink_step(subRateId);
+
+    /* Get model outputs here */
+  }
+
+  mw_osThreadExit((void *)0);
+  return NULL;
+}
+
 void *baseRateTask(void *arg)
 {
   runModel = (rtmGetErrorStatus(pacemaker_simulink_M) == (NULL));
   while (runModel) {
     mw_osSignalEventWaitEver(&baserateTaskSem);
-    pacemaker_simulink_step();
+    if (rtmStepTask(pacemaker_simulink_M, 1)
+        ) {
+      mw_osSignalEventRelease(&subrateTaskSem[0]);
+    }
+
+    pacemaker_simulink_step(0);
 
     /* Get model outputs here */
     stopRequested = !((rtmGetErrorStatus(pacemaker_simulink_M) == (NULL)));
   }
 
-  runModel = 0;
   terminateTask(arg);
   mw_osThreadExit((void *)0);
   return NULL;
@@ -69,6 +96,22 @@ void *terminateTask(void *arg)
   terminatingmodel = 1;
 
   {
+    int i;
+
+    /* Signal all periodic tasks to complete */
+    for (i=0; i<1; i++) {
+      CHECK_STATUS(mw_osSignalEventRelease(&subrateTaskSem[i]), 0,
+                   "mw_osSignalEventRelease");
+      CHECK_STATUS(mw_osSignalEventDelete(&subrateTaskSem[i]), 0,
+                   "mw_osSignalEventDelete");
+    }
+
+    /* Wait for all periodic tasks to complete */
+    for (i=0; i<1; i++) {
+      CHECK_STATUS(mw_osThreadJoin(subRateThread[i], &threadJoinStatus), 0,
+                   "mw_osThreadJoin");
+    }
+
     runModel = 0;
   }
 
@@ -82,6 +125,7 @@ void *terminateTask(void *arg)
 
 int main(int argc, char **argv)
 {
+  subratePriority[0] = 41;
   SystemCoreClockUpdate();
   hardware_init();
   rtmSetErrorStatus(pacemaker_simulink_M, 0);
@@ -90,7 +134,7 @@ int main(int argc, char **argv)
   pacemaker_simulink_initialize();
 
   /* Call RTOS Initialization function */
-  mw_RTOSInit(0.001, 0);
+  mw_RTOSInit(0.001, 1);
 
   /* Wait for stop semaphore */
   mw_osSignalEventWaitEver(&stopSem);

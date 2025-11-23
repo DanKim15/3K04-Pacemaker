@@ -60,12 +60,12 @@ class DCMVisualsView(ttk.Frame):
         ttk.Button(btn_row2, text="Clear Pacemaker", command=self._test_clear_pacemaker).pack(side=tk.LEFT)
     
     def _test_connect(self):
-        """Test button: Connect device"""
-        self.app.device_com = True
-    
+        """Connect device"""
+        self.app.connect_device()
+
     def _test_disconnect(self):
-        """Test button: Disconnect device"""
-        self.app.device_com = False
+        """Disconnect device"""
+        self.app.disconnect_device()
     
     def _test_detect_pacemaker(self):
         """Test button: Detect other pacemaker"""

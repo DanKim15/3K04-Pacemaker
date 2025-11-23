@@ -1,4 +1,6 @@
+MW_I2C.o
 MW_PWM.o
+MW_SCI.o
 MW_digitalIO.o
 RTX_Conf_CM.o
 board.o
@@ -8,6 +10,7 @@ fsl_edma_irq.o
 fsl_misc_utilities.o
 fsl_uart_irq.o
 hardware_init.o
+i2c_api.o
 irq_stub.o
 mw_sdk_interface.o
 mw_semaphore.o
@@ -17,6 +20,9 @@ mw_timer.o
 pacemaker_simulink.o
 pacemaker_simulink_data.o
 pin_mux.o
+rtGetInf.o
+rtGetNaN.o
+rt_nonfinite.o
 sbrk.o
 startup.o
 startup_MK64F12.o

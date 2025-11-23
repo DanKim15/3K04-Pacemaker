@@ -17,6 +17,18 @@
     },
     "testuser5": {
       "password_hash": "936e6844efe02737e2916dccc88baae074307119fe648d9f1d2a735071482107"
+    },
+    "demouser123": {
+      "password_hash": "86251a5df29f5c9d3e99883eb201d35011d5540264b7b5947c8a15b46e71aff0"
+    },
+    "SamarthSerialTest": {
+      "password_hash": "0569e2cd1f6059f0c262e9f5f148bf9fb62d03d90bb1b3793d76d086fac03eb0"
+    },
+    "danielUART": {
+      "password_hash": "af31e82cc455de52ae4736344073ffd59c77b79455c5187d7be7a74b45d6094b"
+    },
+    "danUART": {
+      "password_hash": "9ef8cde5911752c837153981104c74d7558edd1040af06b528f613332cc14540"
     }
   },
   "profiles": {
@@ -126,6 +138,35 @@
         "ARP": 110,
         "VRP": 111,
         "Mode": "AAI"
+      }
+    },
+    "demouser123": {
+      "__last__": {
+        "LRL": 50,
+        "URL": 120,
+        "AtrialAmplitude": 3.5,
+        "AtrialPulseWidth": 1.0,
+        "VentricularAmplitude": 3.5,
+        "VentricularPulseWidth": 1.0,
+        "ARP": 250,
+        "VRP": 320,
+        "Mode": "AOO"
+      }
+    },
+    "SamarthSerialTest": {},
+    "danielUART": {},
+    "danUART": {
+      "__last__": {
+        "LRL": 60,
+        "URL": 150,
+        "AtrialAmplitude": 4,
+        "AtrialPulseWidth": 40,
+        "VentricularAmplitude": 4,
+        "VentricularPulseWidth": 40,
+        "ARP": 250,
+        "VRP": 320,
+        "Mode": "AOO-R",
+        "Hysteresis": false
       }
     }
   }
