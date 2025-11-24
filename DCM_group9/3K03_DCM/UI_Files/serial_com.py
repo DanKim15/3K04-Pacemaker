@@ -165,13 +165,16 @@ class SerialManager:
             return "COM4"
 
     def _read_loop(self) -> None:
-        """Background thread: read 20-byte echo packets."""
+        """Background thread: read and frame 20-byte packets from a byte stream."""
         if not self.ser:
             return
 
+        buf = bytearray()
+
         while not self._stop_event.is_set():
             try:
-                data = self.ser.read(20)
+                # Read some bytes (tune 64 if you want)
+                chunk = self.ser.read(64)
             except Exception:
                 # Serial port broke; mark disconnected and exit
                 try:
@@ -180,33 +183,56 @@ class SerialManager:
                     pass
                 break
 
-            if not data:
-                continue
-            if len(data) != 20:
-                # Not a full packet, skip
-                continue
-            if data[0] != SYNC_BYTE:
-                # Not our packet
+            if not chunk:
                 continue
 
-            decoded = self._decode_echo_packet(data)
-            if decoded is None:
-                # Check if it's an egram data packet instead
-                if len(data) >= 2 and data[1] == MSG_TYPE_EGRAM_DATA:
-                    egram_data = self._decode_egram_packet(data)
-                    if egram_data is not None:
-                        try:
-                            self.app.after(0, self.app.update_egram_data, egram_data)
-                        except Exception:
-                            pass
-                continue
+            buf.extend(chunk)
 
-            # Push into Tk main thread
-            try:
-                self.app.after(0, self.app.update_params_from_device, decoded)
-            except Exception:
-                # If app vanished, just stop
-                break
+            # Try to extract as many 20-byte frames as possible
+            while True:
+                # Look for SYNC_BYTE in the buffer
+                try:
+                    idx = buf.index(SYNC_BYTE)
+                except ValueError:
+                    # No sync byte at all; keep only a small tail in case
+                    # SYNC_BYTE straddles the next read
+                    if len(buf) > 19:
+                        buf = buf[-19:]
+                    break
+
+                # Drop everything before the sync byte (junk / zeros)
+                if idx > 0:
+                    del buf[:idx]
+
+                # Not enough bytes for a full frame yet
+                if len(buf) < 20:
+                    break
+
+                # We have at least one full 20-byte frame
+                frame = bytes(buf[:20])
+                del buf[:20]
+
+                # At this point frame[0] == SYNC_BYTE by construction
+                # Decide what kind of packet it is
+                decoded = self._decode_echo_packet(frame)
+                if decoded is None:
+                    # Maybe it's an egram packet
+                    if len(frame) >= 2 and frame[1] == MSG_TYPE_EGRAM_DATA:
+                        egram_data = self._decode_egram_packet(frame)
+                        if egram_data is not None:
+                            try:
+                                self.app.after(0, self.app.update_egram_data, egram_data)
+                            except Exception:
+                                pass
+                    # Either way, move on to the next potential frame
+                    continue
+
+                # Echo response: push into Tk main thread
+                try:
+                    self.app.after(0, self.app.update_params_from_device, decoded)
+                except Exception:
+                    # If app vanished, just stop
+                    return
 
     def _encode_params(self, params: Dict[str, Any]) -> bytes:
         """
@@ -276,7 +302,7 @@ class SerialManager:
         Decode a 20-byte echo packet into a params dict suitable for app.current_params.
         data[0] already checked == SYNC_BYTE.
         """
-        if len(data) != 20:
+        if len(data) != 20 or data[1] != MSG_TYPE_ECHO_REQ:
             return None
 
         def get_u16_le(idx: int) -> int:
@@ -312,68 +338,41 @@ class SerialManager:
     def _decode_egram_packet(self, data: bytes) -> Optional[Dict[str, Any]]:
         """
         Decode a 20-byte egram data packet.
-        
-        Packet format (20 bytes):
-          0: SYNC (0x16)
-          1: MSG TYPE (0x04)
-          2: Channel flags (bit 0=atrial valid, bit 1=ventricular valid)
-          3: Event marker type (0=none, 1-15=marker codes)
-          4-5: Timestamp (uint16, ms, little-endian)
-          6-7: Atrial sample (int16, mV, little-endian)
-          8-9: Ventricular sample (int16, mV, little-endian)
-          10-11: Event marker timestamp offset (uint16, ms from packet timestamp, little-endian)
-          12-13: Reserved
-          14-19: Reserved
+
+        New packet format (20 bytes):
+        0: SYNC (0x16)
+        1: MSG TYPE (0x04)
+        2-3: Atrial sample (int16, little-endian)
+        4-5: Ventricular sample (int16, little-endian)
+        6-19: Reserved / unused
         """
         if len(data) != 20 or data[0] != SYNC_BYTE or data[1] != MSG_TYPE_EGRAM_DATA:
             return None
-        
+
         def get_u16_le(idx: int) -> int:
             return data[idx] | (data[idx + 1] << 8)
-        
+
         def get_i16_le(idx: int) -> int:
             val = get_u16_le(idx)
             if val >= 0x8000:
                 val -= 0x10000
             return val
-        
-        channel_flags = data[2]
-        event_marker = data[3]
-        timestamp_ms = get_u16_le(4)
-        atrial_sample = get_i16_le(6)  # mV
-        ventricular_sample = get_i16_le(8)  # mV
-        event_offset_ms = get_u16_le(10)
-        
-        # Marker type mapping
-        marker_types = {
-            0: None,
-            1: 'AS', 2: 'AP', 3: 'AT',
-            4: 'VS', 5: 'VP', 6: 'PVC',
-            7: 'TN', 8: 'REF',
-            9: 'UP', 10: 'DOWN',
-            11: 'SR', 12: 'HY',
-            13: 'ATR-Dur', 14: 'ATR-FB', 15: 'ATR-End',
-            16: 'PVP',
-        }
-        
-        marker_type = marker_types.get(event_marker)
-        
-        # Determine which channels are valid
-        atrial_valid = bool(channel_flags & 0x01)
-        ventricular_valid = bool(channel_flags & 0x02)
-        
-        # Calculate absolute timestamp (assuming pacemaker sends relative timestamps)
-        # For now, use system time as base
+
+        atrial_sample = get_i16_le(2)
+        ventricular_sample = get_i16_le(4)
+
+        # Use host time as the timestamp in ms
         import time
-        base_time = time.time() * 1000  # ms
-        
+        timestamp_ms = time.time() * 1000.0
+
         result: Dict[str, Any] = {
-            "timestamp_ms": base_time + timestamp_ms,
-            "atrial_value": float(atrial_sample) if atrial_valid else None,
-            "ventricular_value": float(ventricular_sample) if ventricular_valid else None,
-            "event_marker": marker_type,
-            "event_channel": "Atrial" if event_marker in [1, 2, 3] else ("Ventricular" if event_marker in [4, 5, 6] else None),
-            "event_timestamp_ms": base_time + timestamp_ms + event_offset_ms if event_marker > 0 else None,
+            "timestamp_ms": timestamp_ms,
+            "atrial_value": float(atrial_sample),
+            "ventricular_value": float(ventricular_sample),
+            # No event markers in the simplified protocol
+            "event_marker": None,
+            "event_channel": None,
+            "event_timestamp_ms": None,
         }
-        
+
         return result

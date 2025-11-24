@@ -245,30 +245,25 @@ class EgramView(ttk.Frame):
                 "Device is not connected. Connect the device first."
             )
             return
-        
+
         # Request egram data from device
         success = self.app.serial_manager.request_egram(
             channel=self.channel_selection
         )
-        
+
         if not success:
             messagebox.showerror(
                 "Request Failed",
                 "Failed to send egram request to device."
             )
             return
-        
+
         self.is_streaming = True
         self.start_btn.config(state="disabled")
         self.stop_btn.config(state="normal")
-        
+
         # Start animation
         self._start_animation()
-        
-        messagebox.showinfo(
-            "Egram Started",
-            f"Egram streaming started for {self.channel_selection} channel(s)."
-        )
     
     def _stop_egram(self):
         """Stop egram streaming."""

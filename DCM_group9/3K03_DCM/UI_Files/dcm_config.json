@@ -127,7 +127,7 @@
         "VentricularPulseWidth": 40,
         "ARP": 250,
         "VRP": 320,
-        "Mode": "AOO-R",
+        "Mode": "AOO",
         "Hysteresis": false
       }
     }
